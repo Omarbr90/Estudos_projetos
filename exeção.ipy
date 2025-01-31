@@ -1,0 +1,70 @@
+#--Tratamento de exceções básicas:
+try:
+    nu =int(input("digite um valor "))
+    nu2= int(input("digite um valor "))
+    resu= nu / nu2
+    print(resu)
+except ZeroDivisionError:
+    print("não pode divider por zero")
+except ValueError:
+    print("por favor digite um numero")
+finally:
+    print("Acabou")
+
+#--Capturando exceções múltiplas:
+try:
+    cores = {'vermelho': (255, 0, 0), 'verde': (0, 255, 0), 'azul': (0, 0, 255)}
+    cor = input("Insira uma cor: ")
+    print(f"A cor {cor} tem o valor RGB {cores[cor]}") 
+except KeyError:
+    print("sua cor não exite ou você digitou errado")
+finally:
+    print("Acabou")
+
+#--Bloco else e finally:
+try:
+    numero = int(input("escrerva um numero ai por favor"))
+    if numero > 10:
+        print("número é válido.")
+    else:
+        print(" o programa foi executado com sucesso")
+finally:
+    print("Programa encerrado")
+
+#--Simulação de transações:
+class SaldoInsuficienteError(Exception):
+    pass
+
+try:
+    saldo = int(input("Insira o saldo da sua conta bancária: "))
+    transferencia = int(input("Insira o valor da sua transferência: "))
+
+    if transferencia > saldo:
+        raise SaldoInsuficienteError("Saldo insuficiente para realizar a transferência.")
+    else:
+        print("Pix feito com sucesso!")
+except SaldoInsuficienteError as e:
+    print(e)
+except ValueError:
+    print("Erro: por favor, insira apenas números válidos.")
+finally:
+    print("Programa encerrado.")
+
+
+#--Exceções personalizadas:
+
+class SenhaInvalidaError(Exception):
+    pass
+
+def verifica_senha(senha):
+    if len(senha) < 8 or not any(char.isdigit() for char in senha):
+        raise SenhaInvalidaError("A senha deve ter no mínimo 8 caracteres e conter pelo menos um número.")
+
+try:
+    senha = input("Insira sua senha: ")
+    verifica_senha(senha)
+    print("Senha válida!")
+except SenhaInvalidaError as e:
+    print(e)
+
+        

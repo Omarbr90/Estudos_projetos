@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #9a28a6;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        form {
+            margin: 20px 0;
+            background-color: rgb(255, 255, 255);
+        }
+        input, label {
+            display: block;
+            margin: 10px 0;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #9c0c0c;
+            border-radius: 52px;
+        }
+        .product-list {
+            margin-top: 20px;
+        }
+        .product {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciamento de Produtos</h1>
+        <div>
+            <button onclick="showSection('addProduct')">Adicionar Produto</button>
+            <button onclick="showSection('viewProducts')">Exibir Produtos</button>
+            <button onclick="showSection('searchProduct')">Buscar Produto</button>
+            <button onclick="showSection('removeProduct')">Remover Produto</button>
+        </div>
+
+        <!-- Seção para adicionar produto -->
+        <div id="addProduct" class="section" style="display:none;">
+            <h2>Adicionar Produto</h2>
+            <form id="addProductForm">
+                <label for="productName">Nome do Produto:</label>
+                <input type="text" id="productName" required>
+
+                <label for="productPrice">Preço:</label>
+                <input type="number" id="productPrice" step="0.01" required>
+
+                <label for="productQuantity">Quantidade:</label>
+                <input type="number" id="productQuantity" required>
+
+                <label for="productExpiry">Validade:</label>
+                <input type="date" id="productExpiry" required>
+
+                <button type="button" onclick="addProduct()">Adicionar</button>
+            </form>
+        </div>
+
+        <!-- Seção para exibir produtos -->
+        <div id="viewProducts" class="section" style="display:none;">
+            <h2>Lista de Produtos</h2>
+            <div id="productList" class="product-list">
+                <p>Nenhum produto disponível.</p>
+            </div>
+        </div>
+
+        <!-- Seção para buscar produto -->
+        <div id="searchProduct" class="section" style="display:none;">
+            <h2>Buscar Produto</h2>
+            <form id="searchProductForm">
+                <label for="searchName">Nome do Produto:</label>
+                <input type="text" id="searchName" required>
+                <button type="button" onclick="searchProduct()">Buscar</button>
+            </form>
+            <p id="searchResult"></p>
+        </div>
+
+        <!-- Seção para remover produto -->
+        <div id="removeProduct" class="section" style="display:none;">
+            <h2>Remover Produto</h2>
+            <form id="removeProductForm">
+                <label for="removeName">Nome do Produto:</label>
+                <input type="text" id="removeName" required>
+                <button type="button" onclick="removeProduct()">Remover</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let armazem = [];
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function addProduct() {
+            const name = document.getElementById('productName').value;
+            const price = document.getElementById('productPrice').value;
+            const quantity = document.getElementById('productQuantity').value;
+            const expiry = document.getElementById('productExpiry').value;
+
+            armazem.push({ nome: name, preco: price, quantidade: quantity, validade: expiry });
+
+            alert('Produto adicionado com sucesso!');
+            document.getElementById('addProductForm').reset();
+        }
+
+        function displayProducts() {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = '';
+
+            if (armazem.length === 0) {
+                productList.innerHTML = '<p>Nenhum produto disponível.</p>';
+                return;
+            }
+
+            armazem.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
+                productDiv.innerHTML = `
+                    <strong>Nome:</strong> ${product.nome} <br>
+                    <strong>Preço:</strong> R$ ${product.preco} <br>
+                    <strong>Quantidade:</strong> ${product.quantidade} <br>
+                    <strong>Validade:</strong> ${product.validade}
+                `;
+                productList.appendChild(productDiv);
+            });
+        }
+
+        function searchProduct() {
+            const name = document.getElementById('searchName').value;
+            const result = armazem.find(product => product.nome === name);
+            const searchResult = document.getElementById('searchResult');
+
+            if (result) {
+                searchResult.textContent = `Produto encontrado: ${result.nome}, Preço: R$ ${result.preco}, Quantidade: ${result.quantidade}, Validade: ${result.validade}`;
+            } else {
+                searchResult.textContent = 'Produto não encontrado.';
+            }
+        }
+
+        function removeProduct() {
+            const name = document.getElementById('removeName').value;
+            const index = armazem.findIndex(product => product.nome === name);
+
+            if (index !== -1) {
+                armazem.splice(index, 1);
+                alert('Produto removido com sucesso!');
+                displayProducts();
+                document.getElementById('removeProductForm').reset();
+            } else {
+                alert('Produto não encontrado!');
+            }
+        }
+
+        // Atualiza a lista ao acessar a aba "Exibir Produtos"
+        document.querySelector('button[onclick="showSection(\'viewProducts\')"]').addEventListener('click', displayProducts);
+    </script>
+</body>
+</html>

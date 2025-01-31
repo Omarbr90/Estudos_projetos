@@ -1,0 +1,42 @@
+projetos=[]
+def cadastrar_projeto(codigo, cliente,gerente,inicio, status):
+    projeto={
+        "codigo":codigo,
+        "cliente":cliente,
+        "gerente":gerente,
+       "inicio":inicio,
+        "status":status
+    }
+    projetos.append(projeto)
+    print(f"Seu projeto foi adicionado cujo o código do projeto é {codigo}")
+def atualizar_status_projeto(codigo, novo_status):
+    for projeto in projetos:
+        if projeto["codigo"] == codigo:
+            projeto["status"] = novo_status
+            print(f"O status do projeto cujo código é {codigo} foi atualizado para {novo_status}")
+            return
+    print(f"Projeto com código {codigo} não encontrado.")
+def listar_projetos():
+    if not projetos:
+        print("Nao hove cadastro de projetos") 
+        return
+    for pp in projetos:
+        print(f"codigo: {pp['codigo']} , cliente: {pp['cliente']}, gerente: {pp['gerente']}, inicio: {pp['inicio']} status:{pp['status']}")
+def buscar_projeto(codigo):
+    for projeto in projetos:
+        if projeto["codigo"] == codigo:
+            print(f"codigo: {projeto['codigo']}, cliente: {projeto['cliente']}, gerente: {projeto['gerente']}, inicio: {projeto['inicio']}, status: {projeto['status']}")
+            return
+    print(f"Projeto com código {codigo} não encontrado.")
+def contar_projetos_por_gerente(nome_gerente):
+    contador = 0
+    for projeto in projetos:
+        if projeto["gerente"] == nome_gerente:
+            contador += 1
+    print(f"O gerente {nome_gerente} está gerenciando {contador} projeto(s).")
+
+
+
+cadastrar_projeto("P003", "Cliente A", "Gerente X", "2024-03-01", "Concluído")
+cadastrar_projeto("P003", "Cliente A", "Gerente X", "2024-03-01", "Andamento")
+contar_projetos_por_gerente("Gerente X")

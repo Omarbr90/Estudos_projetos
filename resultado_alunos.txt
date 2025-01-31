@@ -1,0 +1,3 @@
+Alunos ordenados por média:
+Nome: João, Média: 9.95
+Nome: Omar, Média: 9.0
